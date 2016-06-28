@@ -11,7 +11,7 @@ var yelp = new Yelp({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  yelp.search({ term: 'food', location: 'Rochester' })
+  yelp.search({ term: 'food', location: 'Rochester', limit: "2" })
       .then(function (data) {
         console.log(data);
         res.send(data)
