@@ -11,6 +11,13 @@ var yelp = new Yelp({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
+    for(var item in res.headers) {
+        console.log(item + ": here it is" + res.headers[item]);
+    }
+    var headers = request.headers;
+    console.log(headers)
+
   yelp.search({ term: 'food', location: 'Rochester', limit: "2" })
       .then(function (data) {
         console.log(data);

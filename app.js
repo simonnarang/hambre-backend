@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var request = require('request');
 var Yelp = require('yelp');
 
 var routes = require('./routes/index');
@@ -28,9 +29,36 @@ app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+    var headers = String(req.path);
+    while(headers.charAt(0) === '/')
+    headers = headers.substr(1);
+    console.log(headers)
+    var index = headers.indexOf("/");
+    var location = headers.substr(0, index);
+    var cusine = headers.substr(index + 1);
+    console.log(location);
+    console.log(cusine)
+    var yelp = new Yelp({
+        consumer_key: 'T8p3rlxD_eQLz6Jl7ePghw',
+        consumer_secret: 'q_y5_QnNCzfe2MiSyB7baEqGkCk',
+        token: 'GDHL7uPryiq5DNf1nScszTgyH6Uba7Zg',
+        token_secret: 'LzHSrY-YdxEcRqWpmUVHkg5ZcfI'
+    });
+    yelp.search({ term: "food", location: location, limit: "2", category_filter: cusine })
+        .then(function (data) {
+            console.log(data);
+            res.send(data)
+            //res.render()
+        })
+        .catch(function (err) {
+            console.error(err);
+        });
+
+    //next(err);
+    
 });
 
 // error handlers
